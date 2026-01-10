@@ -1,3 +1,4 @@
+import random
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,BaseUserManager,PermissionsMixin
 from django.core.exceptions import ValidationError
@@ -8,7 +9,7 @@ def validate_image(file):
     # size max 
     if file.size > max_size_mb * 1024 * 1024:
         raise ValidationError(f"Image size should not exceed {max_size_mb}MB.")
-    validate_extensions=['.jbp','.png','.gif']
+    validate_extensions=['.jpg','.png','.gif']
     import os
     ext=os.path.splitext(file.name)[1].lower()
     if ext not in validate_extensions:
@@ -25,6 +26,7 @@ class AccountManager(BaseUserManager):
         user = self.model(Email=Email, **extra_fields)
         user.set_password(password)
         user.is_active = True
+        user.otp=str(random.randint(10000,99999))
         user.save(using=self._db)
         return user
 
@@ -36,12 +38,13 @@ class AccountManager(BaseUserManager):
 
 
 class Account(AbstractBaseUser,PermissionsMixin):
-    Updated_Photo=models.ImageField(upload_to='images/', validators=[validate_image], blank=True, null=True)
     FirstName=models.CharField(max_length=50)
     LastName=models.CharField(max_length=50)
+    Email=models.EmailField(unique=True)
+    otp=models.CharField(max_length=5,blank=True,null=True)
+    Updated_Photo=models.ImageField(upload_to='images/', validators=[validate_image], blank=True, null=True)
     Business_Name=models.CharField(max_length=50,blank=True)
     website_Url=models.URLField(max_length=200,blank=True)
-    Email=models.EmailField(unique=True)
     USERNAME_FIELD='Email'
     REQUIRED_FIELDS=['FirstName','LastName']
     is_active=models.BooleanField(default=True)
