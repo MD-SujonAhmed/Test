@@ -2,6 +2,7 @@ import random
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,BaseUserManager,PermissionsMixin
 from django.core.exceptions import ValidationError
+# from django.contrib.
 # Create your models here.
 
 def validate_image(file):
