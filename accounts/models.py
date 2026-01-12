@@ -17,7 +17,7 @@ def validate_image(file):
         raise ValidationError("Unsupported file extension. Only JPG,PNG,GIF are allowed ")
     
     
-
+# EAAe60J8jX3EBQQx1YxrurptvAb8gsmBn3ks6vGQ4ZBe2CCzZBMAdLNxRXgnOBSpsnHBc2BrjzKGjekiWunvt6hGARB1xvcBbOj3ZApf1EBSaLLpOy9KiFDyqnaUUeYOTK2YWM9xt4XMQRLUdnjZA6J63yO2e6CxR9beZABBHufI1rdHOqKrWrmRNSkIBvKrZB46jUBwQZDZD
 class AccountManager(BaseUserManager):
     def create_user(self, Email, password=None, **extra_fields):
         if not Email:
