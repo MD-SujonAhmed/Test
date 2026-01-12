@@ -22,7 +22,6 @@ class AccountManager(BaseUserManager):
     def create_user(self, Email, password=None, **extra_fields):
         if not Email:
             raise ValueError("Email must be set")
-
         Email = self.normalize_email(Email)
         user = self.model(Email=Email, **extra_fields)
         user.set_password(password)
@@ -42,10 +41,8 @@ class Account(AbstractBaseUser,PermissionsMixin):
     FirstName=models.CharField(max_length=50)
     LastName=models.CharField(max_length=50)
     Email=models.EmailField(unique=True)
-    otp=models.CharField(max_length=5,blank=True,null=True)
-    Updated_Photo=models.ImageField(upload_to='images/', validators=[validate_image], blank=True, null=True)
-    Business_Name=models.CharField(max_length=50,blank=True)
-    website_Url=models.URLField(max_length=200,blank=True)
+    # otp=models.CharField(max_length=5,blank=True,null=True)
+    # website_Url=models.URLField(max_length=200,blank=True)
     USERNAME_FIELD='Email'
     REQUIRED_FIELDS=['FirstName','LastName']
     is_active=models.BooleanField(default=True)
@@ -53,6 +50,15 @@ class Account(AbstractBaseUser,PermissionsMixin):
     objects=AccountManager()
     def __str__(self):
         return self.Email
+
+class Profile(models.Model):
+    user = models.OneToOneField(Account,on_delete=models.CASCADE)
+    Updated_Photo=models.ImageField(upload_to='images/', validators=[validate_image], blank=True, null=True)
+    Business_Name=models.CharField(max_length=50,blank=True)
+    Website_Url = models.URLField(blank=True)
+    
+    def __str__(self):
+        return self.user.email   
     
     
     
